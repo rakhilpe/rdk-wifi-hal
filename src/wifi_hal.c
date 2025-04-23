@@ -1622,6 +1622,11 @@ INT wifi_hal_createVAP(wifi_radio_index_t index, wifi_vap_info_map_t *map)
                 //disabled
                 filtermode  = 0;
             }
+#ifdef _PLATFORM_BANANAPI_R4_
+            if (isVapMeshBackhaul(vap->vap_index)) {
+                filtermode = 0; //disabled
+            }
+#endif // _PLATFORM_BANANAPI_R4_
             wifi_hal_info_print("%s:%d: vap index:%d set mac filter mode:%d\n", __func__, __LINE__,
                 vap->vap_index, filtermode);
             if (wifi_setApMacAddressControlMode(vap->vap_index, filtermode) < 0) {
