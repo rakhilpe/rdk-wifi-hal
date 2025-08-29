@@ -227,7 +227,7 @@ static void nl80211_associate_event(wifi_interface_info_t *interface, struct nla
             }
             event.assoc_reject.status_code = status;
 
-            wpa_supplicant_event_wpa(&interface->wpa_s, EVENT_ASSOC_REJECT, &event);
+            wpa_supplicant_event(&interface->wpa_s, EVENT_ASSOC_REJECT, &event); //Lukas change
             return;
         }
         memset(&event, 0, sizeof(event));
@@ -259,7 +259,7 @@ static void nl80211_associate_event(wifi_interface_info_t *interface, struct nla
 	event.assoc_info.beacon_ies_len = 0;
     }
 
-    wpa_supplicant_event_wpa(&interface->wpa_s, EVENT_ASSOC, &event);
+    wpa_supplicant_event(&interface->wpa_s, EVENT_ASSOC, &event);
     return;
 }
 
@@ -286,7 +286,7 @@ static void nl80211_authenticate_event(wifi_interface_info_t *interface, struct 
         wifi_hal_dbg_print("%s:%d: NO FRAME \n", __func__, __LINE__);
     }
 
-    wpa_supplicant_event_wpa(&interface->wpa_s, EVENT_AUTH, &event);
+    wpa_supplicant_event(&interface->wpa_s, EVENT_AUTH, &event);
 
     return;
 }
@@ -780,7 +780,7 @@ static void nl80211_disconnect_event(wifi_interface_info_t *interface, struct nl
 #if defined(CONFIG_WIFI_EMULATOR) || defined(BANANA_PI_PORT)
     wpa_supplicant_cancel_auth_timeout(&interface->wpa_s);
     interface->wpa_s.disconnected = 1;
-    wpa_supplicant_event_wpa(&interface->wpa_s, EVENT_DISASSOC, NULL);
+    wpa_supplicant_event(&interface->wpa_s, EVENT_DISASSOC, NULL);
 #endif
     if (interface->u.sta.wpa_sm != NULL) {
         eapol_sm_deinit(interface->u.sta.wpa_sm->eapol);

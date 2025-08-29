@@ -182,7 +182,8 @@ int platform_get_ssid_default(char *ssid, int vap_index)
             return 0;
         }
     }
-    snprintf(ssid,BPI_LEN_16,"BPI_RDKB-AP%d",vap_index);
+    //snprintf(ssid,BPI_LEN_16,"BPI_RDKB-AP%d",vap_index);
+    snprintf(ssid,BPI_LEN_16,"BPI-RDKB-MLO-AP");
     return 0;
 }
 
@@ -217,7 +218,8 @@ int nvram_get_current_password(char *l_password, int vap_index)
 int nvram_get_current_ssid(char *l_ssid, int vap_index)
 {
     wifi_hal_dbg_print("%s:%d \n",__func__,__LINE__); 
-    snprintf(l_ssid,BPI_LEN_16,"BPI_RDKB-AP%d",vap_index);
+    //snprintf(l_ssid,BPI_LEN_16,"BPI_RDKB-AP%d",vap_index);
+    snprintf(l_ssid,BPI_LEN_16,"BPI-RDKB-MLO-AP");
     return 0;
 }
 
@@ -726,6 +728,7 @@ int nl80211_drv_mlo_msg(struct nl_msg *msg, struct nl_msg **msg_mlo, void *priv,
     (void)priv;
     (void)params;
 
+    printf(" %s:%d \n", __func__, __LINE__);
     return 0;
 }
 
@@ -733,18 +736,28 @@ int nl80211_send_mlo_msg(struct nl_msg *msg)
 {
     (void)msg;
 
+    printf(" %s:%d \n", __func__, __LINE__);
     return 0;
 }
 
 void wifi_drv_get_phy_eht_cap_mac(struct eht_capabilities *eht_capab, struct nlattr **tb)
 {
-    (void)eht_capab;
-    (void)tb;
+   // (void)eht_capab;
+   // (void)tb;
+    printf(" %s:%d \n", __func__, __LINE__);
+    if (tb[NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MAC] &&
+        nla_len(tb[NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MAC]) >= 2) {
+        const u8 *pos;
+
+        pos = nla_data(tb[NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MAC]);
+        eht_capab->mac_cap = WPA_GET_LE16(pos);
+    }
 }
 
 int update_hostap_mlo(wifi_interface_info_t *interface)
 {
     (void)interface;
+    printf(" %s:%d \n", __func__, __LINE__);
 
     return 0;
 }
